@@ -41,3 +41,16 @@ Base case: X₀ satisfies W(X₀)=0.
 Inductive step: assume current state Xₙ has W(Xₙ)=0. After one more gate, we compute
 Xₙ₊₁ = apply_gate_ext(Xₙ, gate_fn).
 By step 3 we know W(Xₙ₊₁)=0.
+
+One thing to bear in mind is that this single Newton‐step projection only cancels the first-order part of the error in enforcing W=0. Because W depends nonlinearly on the amplitudes and phases, one step will typically leave a small residual (of order the square of the original violation). In practice you must either repeat the Newton step until the residual is below your tolerance or use a closed-form phase adjustment if you need to hit W=0 exactly in one shot.
+Let
+  δ = Jᵀ · (J Jᵀ)⁻¹ · [Re W(X), Im W(X)]ᵀ
+and
+  X′ = X – δ.
+
+Then a Taylor expansion of W around X gives
+
+  W(X′)
+    = W(X) – J·δ + ½·δᵀ·H·δ + higher‐order terms
+    = 0     + ½·δᵀ·H·δ + … 
+    = O( W(X)² ).
